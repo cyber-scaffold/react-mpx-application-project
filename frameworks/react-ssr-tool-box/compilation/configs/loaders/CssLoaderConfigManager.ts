@@ -59,7 +59,8 @@ export class CssLoaderConfigManager {
         modules: {
           auto: true,
           exportOnlyLocals: false,
-          getLocalIdent
+          localIdentName: "[file]-[local]-[chunkhash:16]"
+          // getLocalIdent
         },
         esModule: false,
         sourceMap: true
