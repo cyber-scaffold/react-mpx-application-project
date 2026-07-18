@@ -6,8 +6,8 @@ import { promisify } from "util";
 import { v4 as uuid } from "uuid";
 import { injectable, inject } from "inversify";
 
-import { IOCContainer } from "@/frameworks/spa-build-tool/cores/IOCContainer";
-import { FrameworkConfigManager } from "@/frameworks/spa-build-tool/commons/FrameworkConfigManager";
+import { IOCContainer } from "@/frameworks/mpx-application-build-tool/cores/IOCContainer";
+import { FrameworkConfigManager } from "@/frameworks/mpx-application-build-tool/commons/FrameworkConfigManager";
 
 import type { Compiler } from "webpack";
 import type { IUnionFs, IFS } from "unionfs";

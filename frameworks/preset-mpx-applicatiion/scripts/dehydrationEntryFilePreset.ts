@@ -3,7 +3,7 @@ import path from "path";
 import { promisify } from "util";
 
 import { MaterielPairsType, PresetPairsType } from "@/frameworks/react-ssr-tool-box/compilation";
-import { computedPublicPathWithRuntime } from "@/frameworks/tool-box-preset-spa/utils/computedPublicPathWithRuntime";
+import { computedPublicPathWithRuntime } from "@/frameworks/preset-mpx-applicatiion/utils/computedPublicPathWithRuntime";
 
 
 export async function dehydrationEntryFilePreset(materielPairs: MaterielPairsType): Promise<PresetPairsType> {

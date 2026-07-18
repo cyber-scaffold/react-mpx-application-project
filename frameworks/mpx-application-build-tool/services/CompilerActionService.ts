@@ -3,8 +3,8 @@ import { promisify } from "util";
 import pathExists from "path-exists";
 import { injectable, inject } from "inversify";
 
-import { IOCContainer } from "@/frameworks/spa-build-tool/cores/IOCContainer";
-import { FrameworkConfigManager } from "@/frameworks/spa-build-tool/commons/FrameworkConfigManager";
+import { IOCContainer } from "@/frameworks/mpx-application-build-tool/cores/IOCContainer";
+import { FrameworkConfigManager } from "@/frameworks/mpx-application-build-tool/commons/FrameworkConfigManager";
 
 @injectable()
 export class CompilerActionService {

@@ -5,11 +5,11 @@ import { injectable, inject } from "inversify";
 import MiniCssExtractPlugin from "mini-css-extract-plugin";
 import { DllPlugin, DefinePlugin, Configuration } from "webpack";
 
-import { IOCContainer } from "@/frameworks/spa-build-tool/cores/IOCContainer";
-import { FrameworkConfigManager } from "@/frameworks/spa-build-tool/commons/FrameworkConfigManager";
+import { IOCContainer } from "@/frameworks/mpx-application-build-tool/cores/IOCContainer";
+import { FrameworkConfigManager } from "@/frameworks/mpx-application-build-tool/commons/FrameworkConfigManager";
 
 
-import { ScriptLoaderConfigManger } from "@/frameworks/spa-build-tool/configs/loaders/ScriptLoaderConfigManger";
+import { ScriptLoaderConfigManger } from "@/frameworks/mpx-application-build-tool/configs/loaders/ScriptLoaderConfigManger";
 
 
 @injectable()

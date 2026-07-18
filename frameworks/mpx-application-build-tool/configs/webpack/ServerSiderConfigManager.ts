@@ -6,11 +6,11 @@ import { injectable, inject } from "inversify";
 import nodeExternals from "webpack-node-externals";
 import CopyWebpackPlugin from "copy-webpack-plugin";
 
-import { IOCContainer } from "@/frameworks/spa-build-tool/cores/IOCContainer";
-import { FrameworkConfigManager } from "@/frameworks/spa-build-tool/commons/FrameworkConfigManager";
-import { ScriptLoaderConfigManger } from "@/frameworks/spa-build-tool/configs/loaders/ScriptLoaderConfigManger";
+import { IOCContainer } from "@/frameworks/mpx-application-build-tool/cores/IOCContainer";
+import { FrameworkConfigManager } from "@/frameworks/mpx-application-build-tool/commons/FrameworkConfigManager";
+import { ScriptLoaderConfigManger } from "@/frameworks/mpx-application-build-tool/configs/loaders/ScriptLoaderConfigManger";
 
-import { ServerProjectVirtualFile } from "@/frameworks/spa-build-tool/services/ServerProjectVirtualFile";
+import { ServerProjectVirtualFile } from "@/frameworks/mpx-application-build-tool/services/ServerProjectVirtualFile";
 
 import type { Configuration, Compiler } from "webpack";
 

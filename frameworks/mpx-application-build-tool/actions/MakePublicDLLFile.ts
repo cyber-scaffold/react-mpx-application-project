@@ -1,8 +1,8 @@
 import webpack from "webpack";
 import { injectable, inject } from "inversify";
 
-import { IOCContainer } from "@/frameworks/spa-build-tool/cores/IOCContainer";
-import { DLLConfigManager } from "@/frameworks/spa-build-tool/configs/webpack/DLLConfigManager";
+import { IOCContainer } from "@/frameworks/mpx-application-build-tool/cores/IOCContainer";
+import { DLLConfigManager } from "@/frameworks/mpx-application-build-tool/configs/webpack/DLLConfigManager";
 
 /**
  * @description 运行开发命令,可以基于cluster同时开启服务端和客户端渲染服务

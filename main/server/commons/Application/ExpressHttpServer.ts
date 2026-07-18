@@ -10,9 +10,9 @@ import { ApplicationConfigManager } from "@/main/server/commons/Application/Appl
 import { requestMiddleware } from "@/main/server/interceptors/requestMiddleware";
 
 import { DetailPageController } from "@/main/server/controllers/DetailPageController";
+import { SearchPageController } from "@/main/server/controllers/SearchPageController";
 import { IndexPageController } from "@/main/server/controllers/IndexPageController";
 import { UserPageController } from "@/main/server/controllers/UserPageController";
-import { SearchController } from "@/main/server/controllers/SearchController";
 
 import { logger } from "@/main/server/utils/logger";
 
@@ -29,9 +29,9 @@ export class ExpressHttpServer {
   constructor (
     @inject(ApplicationConfigManager) private readonly $ApplicationConfigManager: ApplicationConfigManager,
     @inject(DetailPageController) private readonly $DetailPageController: DetailPageController,
+    @inject(SearchPageController) private readonly $SearchPageController: SearchPageController,
     @inject(IndexPageController) private readonly $IndexPageController: IndexPageController,
-    @inject(UserPageController) private readonly $UserPageController: UserPageController,
-    @inject(SearchController) private readonly $SearchController: SearchController,
+    @inject(UserPageController) private readonly $UserPageController: UserPageController
   ) { }
 
   /** 服务启动时执行的代码 **/
@@ -71,9 +71,9 @@ export class ExpressHttpServer {
     }));
     /** 注册项目中的控制器 **/
     this.expressInstance.use(this.$DetailPageController.getRouter());
+    this.expressInstance.use(this.$SearchPageController.getRouter());
     this.expressInstance.use(this.$IndexPageController.getRouter());
     this.expressInstance.use(this.$UserPageController.getRouter());
-    this.expressInstance.use(this.$SearchController.getRouter());
     /** 启动服务器监听端口 **/
     this.serverInstance = this.expressInstance.listen(server.port, server.address, async () => {
       try {
