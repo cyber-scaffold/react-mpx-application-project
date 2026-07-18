@@ -47,6 +47,11 @@ export class HydrationConfigManager {
         path: hydrationResourceDirectoryPath,
         devtoolModuleFilenameTemplate: "[absolute-resource-path]",
         filename: (pathData: PathData) => `index-${pathData.chunk.name}-hydration-[contenthash].js`,
+        library: {
+          type: "window",
+          export: "default",
+          name: "hydrateBootstrap"
+        },
       },
       resolve: {
         extensions: [".ts", ".tsx", ".js", ".jsx"],

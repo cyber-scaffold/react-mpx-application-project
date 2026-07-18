@@ -37,6 +37,7 @@ export class ServerSiderRenderService {
           <div id="root"></div>
           {_INJECTABLE_DEHYDRATE_CONTENT_SCRIPT_}
           {_HYDRATE_SCRIPT_TAGS_}
+          <script dangerouslySetInnerHTML={{ __html: `window.hydrateBootstrap();` }} />
         </body>
       </html>
     );
