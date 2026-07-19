@@ -2,11 +2,11 @@ import path from "path";
 import nodemon from "nodemon";
 import { injectable, inject } from "inversify";
 
-import { IOCContainer } from "@/frameworks/mpx-application-build-tool/cores/IOCContainer";
-import { FrameworkConfigManager } from "@/frameworks/mpx-application-build-tool/commons/FrameworkConfigManager";
-import { ServerSiderConfigManager } from "@/frameworks/mpx-application-build-tool/configs/webpack/ServerSiderConfigManager";
-import { ServerProjectVirtualFile } from "@/frameworks/mpx-application-build-tool/services/ServerProjectVirtualFile";
-import { GenerateSwaggerDocsService } from "@/frameworks/mpx-application-build-tool/services/GenerateSwaggerDocsService";
+import { IOCContainer } from "@/frameworks/mpx-build-tool/cores/IOCContainer";
+import { FrameworkConfigManager } from "@/frameworks/mpx-build-tool/commons/FrameworkConfigManager";
+import { ServerSiderConfigManager } from "@/frameworks/mpx-build-tool/configs/webpack/ServerSiderConfigManager";
+import { ServerProjectVirtualFile } from "@/frameworks/mpx-build-tool/services/ServerProjectVirtualFile";
+import { GenerateSwaggerDocsService } from "@/frameworks/mpx-build-tool/services/GenerateSwaggerDocsService";
 
 import type { Compiler } from "webpack";
 
@@ -35,7 +35,7 @@ export class MakeServerApplication {
         if (error) {
           reject(error);
         } else {
-          // console.log(stats.toString({ colors: true }));
+          console.log(stats.toString({ colors: true }));
           resolve(true);
         };
       });
@@ -49,7 +49,7 @@ export class MakeServerApplication {
       if (error) {
         console.log(error);
       } else {
-        // console.log(stats.toString({ colors: true }));
+        console.log(stats.toString({ colors: true }));
         await this.$GenerateSwaggerDocsService.execute();
       };
     });

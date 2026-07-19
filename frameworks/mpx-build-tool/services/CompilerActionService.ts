@@ -1,10 +1,10 @@
 import fs from "fs";
-import { promisify } from "util";
 import pathExists from "path-exists";
+import { promisify } from "util";
 import { injectable, inject } from "inversify";
 
-import { IOCContainer } from "@/frameworks/mpx-application-build-tool/cores/IOCContainer";
-import { FrameworkConfigManager } from "@/frameworks/mpx-application-build-tool/commons/FrameworkConfigManager";
+import { IOCContainer } from "@/frameworks/mpx-build-tool/cores/IOCContainer";
+import { FrameworkConfigManager } from "@/frameworks/mpx-build-tool/commons/FrameworkConfigManager";
 
 @injectable()
 export class CompilerActionService {

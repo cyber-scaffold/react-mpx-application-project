@@ -6,8 +6,8 @@ import { promisify } from "util";
 import { v4 as uuid } from "uuid";
 import { injectable, inject } from "inversify";
 
-import { IOCContainer } from "@/frameworks/mpx-application-build-tool/cores/IOCContainer";
-import { FrameworkConfigManager } from "@/frameworks/mpx-application-build-tool/commons/FrameworkConfigManager";
+import { IOCContainer } from "@/frameworks/mpx-build-tool/cores/IOCContainer";
+import { FrameworkConfigManager } from "@/frameworks/mpx-build-tool/commons/FrameworkConfigManager";
 
 import type { Compiler } from "webpack";
 import type { IUnionFs, IFS } from "unionfs";
@@ -30,7 +30,7 @@ export class ServerProjectVirtualFile {
   ) { };
 
   private async getVirtualEntryFileAndReplaceContent(): Promise<string> {
-    const originContent = await promisify(fs.readFile)(path.resolve(__dirname, "../templates/virtualEntryFile.template"), "utf-8");
+    const originContent = await promisify(fs.readFile)(path.resolve(__dirname, "../templates/virtual-server-entry.template"), "utf-8");
     return originContent;
   };
 

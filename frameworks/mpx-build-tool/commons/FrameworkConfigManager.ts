@@ -6,7 +6,7 @@ import { promisify } from "util";
 import pathExists from "path-exists";
 import { injectable } from "inversify";
 
-import { IOCContainer } from "@/frameworks/mpx-application-build-tool/cores/IOCContainer";
+import { IOCContainer } from "@/frameworks/mpx-build-tool/cores/IOCContainer";
 import type { MaterielCompilationInfoType } from "@/frameworks/react-ssr-tool-box/compilation";
 
 @injectable()
@@ -70,7 +70,6 @@ export class FrameworkConfigManager {
    * 所以需要在项目文件中手动指定一下,避免出现错误
    * **/
   private dehydrateIncludePackageList: string[] = [];
-
 
   /**
    * 针对脱水物料的优化
