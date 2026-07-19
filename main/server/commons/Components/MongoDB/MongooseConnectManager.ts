@@ -1,10 +1,12 @@
+import { createConnection } from "mongoose";
 import { injectable, inject } from "inversify";
-import { createConnection, Connection } from "mongoose";
 
 import { ApplicationConfigManager } from "@/main/server/commons/Application/ApplicationConfigManager";
 import { IOCContainer } from "@/main/server/cores/IOCContainer";
 
 import { logger } from "@/main/server/utils/logger";
+
+import type { Connection } from "mongoose";
 
 @injectable()
 export class MongooseConnectManager {

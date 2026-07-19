@@ -27,7 +27,7 @@ export class SearchPageController {
     const content = { list: Array(10).fill(1) };
     return await this.$ServerSiderRenderService.render({
       request,
-      alias: "Application",
+      alias: "SearchPage",
       title: "搜索结果页",
       keywords: [],
       description: "",

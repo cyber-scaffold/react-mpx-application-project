@@ -25,7 +25,7 @@ export class IndexPageController {
     const content = { list: Array(10).fill(1).map((fill, index) => fill + index) };
     return await this.$ServerSiderRenderService.render({
       request,
-      alias: "Application",
+      alias: "IndexPage",
       title: "主页",
       keywords: [],
       description: "",

@@ -24,7 +24,7 @@ export class UserPageController {
   public async execute(request: Request): Promise<string> {
     return await this.$ServerSiderRenderService.render({
       request,
-      alias: "Application",
+      alias: "UserPage",
       title: "用户中心",
       keywords: [],
       description: "",

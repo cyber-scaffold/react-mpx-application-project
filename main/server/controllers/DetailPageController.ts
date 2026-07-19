@@ -24,7 +24,7 @@ export class DetailPageController {
   public async execute(request: Request): Promise<string> {
     return await this.$ServerSiderRenderService.render({
       request,
-      alias: "Application",
+      alias: "DetailPage",
       title: "详情页",
       keywords: [],
       description: "这是详情页",

@@ -14,7 +14,7 @@ import { createRoot } from "react-dom/client";
 //@ts-ignore 这里需要忽略因为这里的绝对路径可能含有后缀名,默认情况下typescript不允许后缀名,所以需要让typescript忽略
 import RenderElement from "$$sourceCodeFilePath$$";
 
-function bootstrap() {
+export default function hydrateBootstrap() {
   let rootElement;
   if (typeof (window as any)._HYDRATE_MOUNT_ELEMENT_ == "string") {
     rootElement = document.getElementById((window as any)._HYDRATE_MOUNT_ELEMENT_);
@@ -27,4 +27,4 @@ function bootstrap() {
   (window as any)._HYDRATE_MOUNT_ELEMENT_ = createRoot(rootElement).render(
     <RenderElement { ...(window as any)._INJECTABLE_DEHYDRATE_CONTENT_ } />
   );
-}; bootstrap();
+};
