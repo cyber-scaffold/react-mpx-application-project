@@ -14,7 +14,7 @@ import { LessLoaderConfigManager } from "@/frameworks/react-ssr-tool-box/compila
 import { SassLoaderConfigManager } from "@/frameworks/react-ssr-tool-box/compilation/configs/loaders/SassLoaderConfigManager";
 import { CssLoaderConfigManager } from "@/frameworks/react-ssr-tool-box/compilation/configs/loaders/CssLoaderConfigManager";
 
-import { ConvertDehydrationEntryFile } from "@/frameworks/react-ssr-tool-box/compilation/services/ConvertDehydrationEntryFile";
+import { ConvertDehydrateEntryFile } from "@/frameworks/react-ssr-tool-box/compilation/services/ConvertDehydrateEntryFile";
 import { ComputedExternalsModules } from "@/frameworks/react-ssr-tool-box/compilation/services/ComputedExternalsModules";
 import { CompilerProgressPlugin } from "@/frameworks/react-ssr-tool-box/compilation/plugins/CompilerProgressPlugin";
 
@@ -24,11 +24,11 @@ import type { PathData, Compiler, Configuration } from "webpack";
  * 脱水化资源的编译选项管理器
  * **/
 @injectable()
-export class DehydrationConfigManager {
+export class DehydrateConfigManager {
 
   constructor (
     @inject(CompilationMaterielResourceDatabaseManager) private readonly $CompilationMaterielResourceDatabaseManager: CompilationMaterielResourceDatabaseManager,
-    @inject(ConvertDehydrationEntryFile) private readonly $ConvertDehydrationEntryFile: ConvertDehydrationEntryFile,
+    @inject(ConvertDehydrateEntryFile) private readonly $ConvertDehydrateEntryFile: ConvertDehydrateEntryFile,
     @inject(ScriptLoaderConfigManger) private readonly $ScriptLoaderConfigManger: ScriptLoaderConfigManger,
     @inject(FileLoaderConfigManager) private readonly $FileLoaderConfigManager: FileLoaderConfigManager,
     @inject(LessLoaderConfigManager) private readonly $LessLoaderConfigManager: LessLoaderConfigManager,
@@ -42,15 +42,15 @@ export class DehydrationConfigManager {
    * 最基础的webpack编译配置
    * **/
   public async getBasicConfig(): Promise<Configuration> {
-    const { projectDirectoryPath, extractResourceDirectoryName, dehydrationResourceDirectoryPath } = this.$CompilationConfigManager.getRuntimeConfig();
+    const { projectDirectoryPath, extractResourceDirectoryName, dehydrateResourceDirectoryPath } = this.$CompilationConfigManager.getRuntimeConfig();
     return {
-      entry: this.$ConvertDehydrationEntryFile.getWebpackEntryPoints(),
+      entry: this.$ConvertDehydrateEntryFile.getWebpackEntryPoints(),
       target: "node",
       output: {
         clean: true,
-        path: dehydrationResourceDirectoryPath,
+        path: dehydrateResourceDirectoryPath,
         devtoolModuleFilenameTemplate: "[absolute-resource-path]",
-        filename: (pathData: PathData) => `index-${pathData.chunk.name}-dehydration-[contenthash].js`,
+        filename: (pathData: PathData) => `index-${pathData.chunk.name}-dehydrate-[contenthash].js`,
         library: {
           type: "commonjs"
         }
@@ -74,7 +74,7 @@ export class DehydrationConfigManager {
       externals: await this.$ComputedExternalsModules.getComputedExternalsPackageList(),
       module: {
         rules: (await Promise.all([
-          this.$FileLoaderConfigManager.getConfigByDehydration(),
+          this.$FileLoaderConfigManager.getConfigByDehydrate(),
           this.$ScriptLoaderConfigManger.getLoaderConfig(),
           this.$LessLoaderConfigManager.getLoaderConfig(),
           this.$SassLoaderConfigManager.getLoaderConfig(),
@@ -84,16 +84,16 @@ export class DehydrationConfigManager {
       plugins: [
         new WebpackBar({ name: "制作脱水物料" }),
         new CompilerProgressPlugin({
-          type: "dehydration",
+          type: "dehydrate",
           materielResourceDatabaseManager: this.$CompilationMaterielResourceDatabaseManager
         }),
         new DefinePlugin({
-          "process.env.RESOURCE_TYPE": JSON.stringify("dehydration")
+          "process.env.RESOURCE_TYPE": JSON.stringify("dehydrate")
         }),
         new MiniCssExtractPlugin({
           runtime: false,
           linkType: false,
-          filename: (pathData: PathData) => `../${extractResourceDirectoryName}/index-${pathData.chunk.name}-dehydration-[contenthash].css`
+          filename: (pathData: PathData) => `../${extractResourceDirectoryName}/index-${pathData.chunk.name}-dehydrate-[contenthash].css`
         })
       ]
     };
@@ -108,7 +108,7 @@ export class DehydrationConfigManager {
       mode: "development",
       devtool: "source-map"
     }));
-    await this.$ConvertDehydrationEntryFile.mountWithWebpackCompiler(webpackCompiler);
+    await this.$ConvertDehydrateEntryFile.mountWithWebpackCompiler(webpackCompiler);
     return webpackCompiler;
   };
 
@@ -130,10 +130,10 @@ export class DehydrationConfigManager {
         })
       ]
     }));
-    await this.$ConvertDehydrationEntryFile.mountWithWebpackCompiler(webpackCompiler);
+    await this.$ConvertDehydrateEntryFile.mountWithWebpackCompiler(webpackCompiler);
     return webpackCompiler;
   };
 
 };
 
-IOCContainer.bind(DehydrationConfigManager).toSelf().inRequestScope();
+IOCContainer.bind(DehydrateConfigManager).toSelf().inRequestScope();

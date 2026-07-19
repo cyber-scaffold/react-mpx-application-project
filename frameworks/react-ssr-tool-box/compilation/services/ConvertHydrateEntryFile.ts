@@ -23,9 +23,9 @@ import type { IUnionFs, IFS } from "unionfs";
  * @docs https://webpack.docschina.org/api/node#custom-file-systems
  * **/
 @injectable()
-export class ConvertHydrationEntryFile {
+export class ConvertHydrateEntryFile {
 
-  private virtualDirectoryPath = path.resolve(process.cwd(), `./${uuid()}/__virtual__/hydration/`);
+  private virtualDirectoryPath = path.resolve(process.cwd(), `./${uuid()}/__virtual__/hydrate/`);
 
   private custmerFileSystem: IUnionFs = ufs.use((memfs.fs as unknown as IFS)).use(fs);
 
@@ -41,8 +41,8 @@ export class ConvertHydrationEntryFile {
    * 并生成webpack可以识别的entry-points对象
    * **/
   public async initialize(materielPairs: [alias: string, detail: MaterielCompilationInfoType][]) {
-    const { hydrationPreset } = this.$CompilationConfigManager.getRuntimeConfig();
-    const virtualFileVolumePairs = await hydrationPreset(materielPairs);
+    const { hydratePreset } = this.$CompilationConfigManager.getRuntimeConfig();
+    const virtualFileVolumePairs = await hydratePreset(materielPairs);
     /** 在内存中写入这些新入口文件的内容 **/
     memfs.vol.fromJSON(fromPairs(virtualFileVolumePairs), this.virtualDirectoryPath);
     /** 生成详细的webpackEntryPoints **/
@@ -68,4 +68,4 @@ export class ConvertHydrationEntryFile {
 };
 
 
-IOCContainer.bind(ConvertHydrationEntryFile).toSelf().inRequestScope()
+IOCContainer.bind(ConvertHydrateEntryFile).toSelf().inRequestScope()

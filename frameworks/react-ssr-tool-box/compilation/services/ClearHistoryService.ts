@@ -24,24 +24,24 @@ export class ClearHistoryService {
   /** 获取文件路径 **/
   private async getFileRealPathWithContext(type, filename: string) {
     const {
-      hydrationResourceDirectoryPath,
-      dehydrationResourceDirectoryPath
+      hydrateResourceDirectoryPath,
+      dehydrateResourceDirectoryPath
     } = await this.$CompilationConfigManager.getRuntimeConfig();
-    if (type === "hydration") {
-      return path.resolve(hydrationResourceDirectoryPath, filename);
+    if (type === "hydrate") {
+      return path.resolve(hydrateResourceDirectoryPath, filename);
     };
-    if (type === "dehydration") {
-      return path.resolve(dehydrationResourceDirectoryPath, filename);
+    if (type === "dehydrate") {
+      return path.resolve(dehydrateResourceDirectoryPath, filename);
     };
     throw new Error(`
-      ${filename} unknow Resource Type Do You Mean "hydration" or "dehydration" or file not exist
+      ${filename} unknow Resource Type Do You Mean "hydrate" or "dehydrate" or file not exist
     `);
   };
 
   /** 让新的资源清单和资源管理器中的清单进行比较 **/
-  async diff(alias: string, type: "hydration" | "dehydration", latestAssetsFileList: CompileAssetsDictionaryType) {
-    if (type === "hydration") {
-      const database = this.$CompilationMaterielResourceDatabaseManager.getHydrationCompileDatabase();
+  async diff(alias: string, type: "hydrate" | "dehydrate", latestAssetsFileList: CompileAssetsDictionaryType) {
+    if (type === "hydrate") {
+      const database = this.$CompilationMaterielResourceDatabaseManager.getHydrateCompileDatabase();
       await database.read();
       const legacyAssetsFileList: CompileAssetsDictionaryType = database.data[alias];
 
@@ -49,7 +49,7 @@ export class ClearHistoryService {
   };
 
   /** 清理遗留文件 **/
-  public async execute(type: "hydration" | "dehydration", resources: CompileAssetsDictionaryType) {
+  public async execute(type: "hydrate" | "dehydrate", resources: CompileAssetsDictionaryType) {
     if (resources.javascript instanceof Array) {
       await Promise.all(resources.javascript.map(async (everyFileName) => {
         const javaScriptRealFilePath = await this.getFileRealPathWithContext(type, everyFileName);

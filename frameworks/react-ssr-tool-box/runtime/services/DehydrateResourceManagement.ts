@@ -5,13 +5,13 @@ import { RuntimeMaterielResourceDatabaseManager } from "@/frameworks/react-ssr-t
 
 import type { CompileAssetsDictionaryType } from "@/frameworks/react-ssr-tool-box/public/ResourceManager.d";
 
-export type DehydrationCompileAssetsListQueryResult = CompileAssetsDictionaryType | false;
+export type DehydrateCompileAssetsListQueryResult = CompileAssetsDictionaryType | false;
 
 /**
  * 脱水物料的资源管理器
  * **/
 @injectable()
-export class DehydrationResourceManagement {
+export class DehydrateResourceManagement {
 
   constructor (
     @inject(RuntimeMaterielResourceDatabaseManager) private readonly $RuntimeMaterielResourceDatabaseManager: RuntimeMaterielResourceDatabaseManager,
@@ -20,23 +20,23 @@ export class DehydrationResourceManagement {
   /**
    * 获取脱水渲染时涉及到的资源
    * **/
-  public async getResourceListByAlias(alias: string): Promise<DehydrationCompileAssetsListQueryResult> {
-    const dehydrationCompileDatabase = this.$RuntimeMaterielResourceDatabaseManager.getDehydrationCompileDatabase();
-    await dehydrationCompileDatabase.read();
-    if (dehydrationCompileDatabase.data["status"] !== "done") {
+  public async getResourceListByAlias(alias: string): Promise<DehydrateCompileAssetsListQueryResult> {
+    const dehydrateCompileDatabase = this.$RuntimeMaterielResourceDatabaseManager.getDehydrateCompileDatabase();
+    await dehydrateCompileDatabase.read();
+    if (dehydrateCompileDatabase.data["status"] !== "done") {
       await new Promise((resolve) => setTimeout(resolve, 100));
       return await this.getResourceListByAlias(alias);
     };
-    if (!dehydrationCompileDatabase.data["assets"]) {
+    if (!dehydrateCompileDatabase.data["assets"]) {
       return false;
     };
-    if (!dehydrationCompileDatabase.data["assets"][alias]) {
+    if (!dehydrateCompileDatabase.data["assets"][alias]) {
       return false;
     };
-    const compileAssetsInfo = dehydrationCompileDatabase.data["assets"][alias];
+    const compileAssetsInfo = dehydrateCompileDatabase.data["assets"][alias];
     return compileAssetsInfo;
   };
 
 };
 
-IOCContainer.bind(DehydrationResourceManagement).toSelf().inRequestScope();
+IOCContainer.bind(DehydrateResourceManagement).toSelf().inRequestScope();

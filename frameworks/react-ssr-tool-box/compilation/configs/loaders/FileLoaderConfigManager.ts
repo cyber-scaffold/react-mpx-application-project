@@ -77,7 +77,7 @@ export class FileLoaderConfigManager {
   /**
    * 对于 脱水编译环节而言 要把 在注水编译环节生成的 静态资源排除掉
    * **/
-  public async getConfigByDehydration() {
+  public async getConfigByDehydrate() {
     const { hydrateDictionary } = this.$CompilationConfigManager.getRuntimeConfig();
     const hydrateCompilationPhase: string[] = Object.values(hydrateDictionary).map((everyMaterielInfo: MaterielCompilationInfoType) => {
       return everyMaterielInfo.source;
@@ -96,7 +96,7 @@ export class FileLoaderConfigManager {
     }];
   };
 
-  public async getConfigByHydration() {
+  public async getConfigByHydrate() {
     return [{
       test: /\.(ico|png|jpg|jpeg|gif|mp3|mp4|avi|svg|ttf|eot|otf|fon|ttc|woff|woff2)$/,
       oneOf: [{

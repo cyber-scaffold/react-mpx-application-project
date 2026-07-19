@@ -1,11 +1,11 @@
 /**
  * 服务端运行时阶段需要使用的方法
  * **/
-export { renderDehydratedResourceWithSandbox } from "@/frameworks/react-ssr-tool-box/runtime/renderDehydratedResourceWithSandbox";
+export { renderDehydrateResourceWithSandbox } from "@/frameworks/react-ssr-tool-box/runtime/renderDehydrateResourceWithSandbox";
 export { setAndInitializeRuntimeConfig } from "@/frameworks/react-ssr-tool-box/runtime/setAndInitializeRuntimeConfig";
 export { getRuntimeConfiguration } from "@/frameworks/react-ssr-tool-box/runtime/getRuntimeConfiguration";
-export { getDehydratedResource } from "@/frameworks/react-ssr-tool-box/runtime/getDehydratedResource";
-export { getHydrationResource } from "@/frameworks/react-ssr-tool-box/runtime/getHydrationResource";
+export { getDehydrateResource } from "@/frameworks/react-ssr-tool-box/runtime/getDehydrateResource";
+export { getHydrateResource } from "@/frameworks/react-ssr-tool-box/runtime/getHydrateResource";
 export { getResourcePathInfo } from "@/frameworks/react-ssr-tool-box/runtime/getResourcePathInfo";
 export { getResourceSummary } from "@/frameworks/react-ssr-tool-box/runtime/getResourceSummary";
 

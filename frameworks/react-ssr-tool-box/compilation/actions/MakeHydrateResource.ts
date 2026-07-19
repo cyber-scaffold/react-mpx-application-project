@@ -3,8 +3,8 @@ import { injectable, inject } from "inversify";
 
 import { IOCContainer } from "@/frameworks/react-ssr-tool-box/compilation/cores/IOCContainer";
 import { CompilationConfigManager } from "@/frameworks/react-ssr-tool-box/compilation/commons/CompilationConfigManager";
-import { ConvertHydrationEntryFile } from "@/frameworks/react-ssr-tool-box/compilation/services/ConvertHydrationEntryFile";
-import { HydrationConfigManager } from "@/frameworks/react-ssr-tool-box/compilation/configs/webpack/HydrationConfigManager";
+import { ConvertHydrateEntryFile } from "@/frameworks/react-ssr-tool-box/compilation/services/ConvertHydrateEntryFile";
+import { HydrateConfigManager } from "@/frameworks/react-ssr-tool-box/compilation/configs/webpack/HydrateConfigManager";
 import { CompilationMaterielResourceDatabaseManager } from "@/frameworks/react-ssr-tool-box/compilation/commons/CompilationMaterielResourceDatabaseManager";
 
 import { filterWebpackStats } from "@/frameworks/react-ssr-tool-box/compilation/utils/filterWebpackStats";
@@ -17,13 +17,13 @@ import type { MaterielCompilationInfoType } from "@/frameworks/react-ssr-tool-bo
  * 如果源代码发生改变,并且不是开发模式的情况下,获取水合化资源的时候就要重新编译
  * **/
 @injectable()
-export class MakeHydrationResource {
+export class MakeHydrateResource {
 
   constructor (
     @inject(CompilationMaterielResourceDatabaseManager) private readonly $CompilationMaterielResourceDatabaseManager: CompilationMaterielResourceDatabaseManager,
-    @inject(ConvertHydrationEntryFile) private readonly $ConvertHydrationEntryFile: ConvertHydrationEntryFile,
+    @inject(ConvertHydrateEntryFile) private readonly $ConvertHydrateEntryFile: ConvertHydrateEntryFile,
     @inject(CompilationConfigManager) private readonly $CompilationConfigManager: CompilationConfigManager,
-    @inject(HydrationConfigManager) private readonly $HydrationConfigManager: HydrationConfigManager
+    @inject(HydrateConfigManager) private readonly $HydrateConfigManager: HydrateConfigManager
   ) { }
 
   /**
@@ -39,7 +39,7 @@ export class MakeHydrationResource {
       };
       return [everyMaterielInfo.alias, everyMaterielInfo];
     }));
-    await this.$ConvertHydrationEntryFile.initialize(materielPairs);
+    await this.$ConvertHydrateEntryFile.initialize(materielPairs);
   };
 
   /**
@@ -47,10 +47,10 @@ export class MakeHydrationResource {
    * **/
   public async makeResourceWithWatchMode(): Promise<void | boolean> {
     /** 获取注水物料的编译结果的管理数据库 **/
-    const hydrationCompileDatabase = this.$CompilationMaterielResourceDatabaseManager.getHydrationCompileDatabase();
-    await hydrationCompileDatabase.write();
+    const hydrateCompileDatabase = this.$CompilationMaterielResourceDatabaseManager.getHydrateCompileDatabase();
+    await hydrateCompileDatabase.write();
     /** 生成编译对象 **/
-    const webpackCompiler: Compiler = await this.$HydrationConfigManager.getWebpackDevelopmentCompiler();
+    const webpackCompiler: Compiler = await this.$HydrateConfigManager.getWebpackDevelopmentCompiler();
     /** 开启一个编译对象 **/
     webpackCompiler.watch({ ignored: "**/node_modules/**", aggregateTimeout: 2000, poll: 1000 }, async (error, stats) => {
       if (error) {
@@ -59,8 +59,8 @@ export class MakeHydrationResource {
         // console.log(stats.toString({ colors: true }));
         const latestAssetsFileList = filterWebpackStats(stats.toJson({ all: false, assets: true, source: false, outputPath: true }));
         /** 在json数据库中保存资源信息 **/
-        hydrationCompileDatabase.data["assets"] = latestAssetsFileList;
-        await hydrationCompileDatabase.write();
+        hydrateCompileDatabase.data["assets"] = latestAssetsFileList;
+        await hydrateCompileDatabase.write();
       };
     });
   };
@@ -69,10 +69,10 @@ export class MakeHydrationResource {
    * 在build模式下进行物料制作
    * **/
   public async makeResourceWithBuildMode(): Promise<void | boolean> {
-    const hydrationCompileDatabase = this.$CompilationMaterielResourceDatabaseManager.getHydrationCompileDatabase();
-    await hydrationCompileDatabase.write();
+    const hydrateCompileDatabase = this.$CompilationMaterielResourceDatabaseManager.getHydrateCompileDatabase();
+    await hydrateCompileDatabase.write();
     /** 生成编译对象 **/
-    const webpackCompiler: Compiler = await this.$HydrationConfigManager.getWebpackProductionCompiler();
+    const webpackCompiler: Compiler = await this.$HydrateConfigManager.getWebpackProductionCompiler();
     /** 执行编译并记录结果 **/
     webpackCompiler.run(async (error, stats) => {
       if (error) {
@@ -81,12 +81,12 @@ export class MakeHydrationResource {
         // console.log(stats.toString({ colors: true }));
         const latestAssetsFileList = filterWebpackStats(stats.toJson({ all: false, assets: true, source: false, outputPath: true }));
         /** 在json数据库中保存资源信息 **/
-        hydrationCompileDatabase.data["assets"] = latestAssetsFileList;
-        await hydrationCompileDatabase.write();
+        hydrateCompileDatabase.data["assets"] = latestAssetsFileList;
+        await hydrateCompileDatabase.write();
       };
     });
   };
 
 };
 
-IOCContainer.bind(MakeHydrationResource).toSelf().inRequestScope();
+IOCContainer.bind(MakeHydrateResource).toSelf().inRequestScope();

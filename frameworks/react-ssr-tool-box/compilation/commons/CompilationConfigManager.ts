@@ -27,16 +27,16 @@ export interface CompilationConfigType {
   assetsDirectoryPath: string
   extractResourceDirectoryName: string
   extractResourceDirectoryPath: string
-  hydrationResourceDirectoryName: string
-  hydrationResourceDirectoryPath: string
+  hydrateResourceDirectoryName: string
+  hydrateResourceDirectoryPath: string
   hydrateDictionary: MaterielInfoByAliasDictionaryType
   dehydrateDictionary: MaterielInfoByAliasDictionaryType
-  dehydrationResourceDirectoryName: string
-  dehydrationResourceDirectoryPath: string
+  dehydrateResourceDirectoryName: string
+  dehydrateResourceDirectoryPath: string
   dehydrateIncludePackageList?: string[]
   dehydrateExcludePackageList?: string[]
-  dehydrationPreset: (materielPairs: MaterielPairsType) => Promise<PresetPairsType>
-  hydrationPreset: (materielPairs: MaterielPairsType) => Promise<PresetPairsType>
+  dehydratePreset: (materielPairs: MaterielPairsType) => Promise<PresetPairsType>
+  hydratePreset: (materielPairs: MaterielPairsType) => Promise<PresetPairsType>
   materielArrayList: MaterielCompilationInfoType[]
 };
 
@@ -44,12 +44,12 @@ export interface CustmerInputCompilationConfigType {
   projectDirectoryPath?: string
   assetsDirectoryName?: string
   extractResourceDirectoryName?: string
-  hydrationResourceDirectoryName?: string
-  dehydrationResourceDirectoryName?: string
+  hydrateResourceDirectoryName?: string
+  dehydrateResourceDirectoryName?: string
   dehydrateIncludePackageList?: string[]
   dehydrateExcludePackageList?: string[]
-  dehydrationPreset: (materielPairs: MaterielPairsType) => Promise<PresetPairsType>
-  hydrationPreset: (materielPairs: MaterielPairsType) => Promise<PresetPairsType>
+  dehydratePreset: (materielPairs: MaterielPairsType) => Promise<PresetPairsType>
+  hydratePreset: (materielPairs: MaterielPairsType) => Promise<PresetPairsType>
   materiels?: MaterielCompilationInfoType[]
 };
 
@@ -79,19 +79,19 @@ export class CompilationConfigManager {
   };
 
   /** 脱水资源的输出位置对应的文件夹名称 **/
-  private dehydrationResourceDirectoryName = "dehydration";
+  private dehydrateResourceDirectoryName = "dehydrate";
 
   /** 脱水资源的输出位置(服务端ssr渲染函数)(根据 物料资产的目录 和 对应文件夹名称 计算得到) **/
-  private getDehydrationResourceDirectoryPath() {
-    return path.resolve(this.getAssetsDirectoryPath(), this.dehydrationResourceDirectoryName);
+  private getDehydrateResourceDirectoryPath() {
+    return path.resolve(this.getAssetsDirectoryPath(), this.dehydrateResourceDirectoryName);
   };
 
   /** 注水资源的输出位置对应的文件夹名称 **/
-  private hydrationResourceDirectoryName = "hydration";
+  private hydrateResourceDirectoryName = "hydrate";
 
   /** 注水资源的输出位置(前端javascript和css)(根据 物料资产的目录 和 对应文件夹名称 计算得到) **/
-  private getHydrationResourceDirectoryPath() {
-    return path.resolve(this.getAssetsDirectoryPath(), this.hydrationResourceDirectoryName);
+  private getHydrateResourceDirectoryPath() {
+    return path.resolve(this.getAssetsDirectoryPath(), this.hydrateResourceDirectoryName);
   };
 
   /**
@@ -128,9 +128,9 @@ export class CompilationConfigManager {
    * **/
   private dehydrateExcludePackageList: string[] = [];
 
-  private dehydrationPreset: (materielPairs: MaterielPairsType) => Promise<PresetPairsType>;
+  private dehydratePreset: (materielPairs: MaterielPairsType) => Promise<PresetPairsType>;
 
-  private hydrationPreset: (materielPairs: MaterielPairsType) => Promise<PresetPairsType>;
+  private hydratePreset: (materielPairs: MaterielPairsType) => Promise<PresetPairsType>;
 
   /** 基于用户的配置合并覆盖掉原来的属性然后重新计算一遍 **/
   public async initialize(inputCustmerConfig: CustmerInputCompilationConfigType) {
@@ -143,11 +143,11 @@ export class CompilationConfigManager {
     if (inputCustmerConfig.assetsDirectoryName) {
       this.assetsDirectoryName = inputCustmerConfig.assetsDirectoryName;
     };
-    if (inputCustmerConfig.hydrationResourceDirectoryName) {
-      this.hydrationResourceDirectoryName = inputCustmerConfig.hydrationResourceDirectoryName;
+    if (inputCustmerConfig.hydrateResourceDirectoryName) {
+      this.hydrateResourceDirectoryName = inputCustmerConfig.hydrateResourceDirectoryName;
     };
-    if (inputCustmerConfig.dehydrationResourceDirectoryName) {
-      this.dehydrationResourceDirectoryName = inputCustmerConfig.dehydrationResourceDirectoryName;
+    if (inputCustmerConfig.dehydrateResourceDirectoryName) {
+      this.dehydrateResourceDirectoryName = inputCustmerConfig.dehydrateResourceDirectoryName;
     };
     if (inputCustmerConfig.dehydrateIncludePackageList) {
       this.dehydrateIncludePackageList = inputCustmerConfig.dehydrateIncludePackageList;
@@ -155,11 +155,11 @@ export class CompilationConfigManager {
     if (inputCustmerConfig.dehydrateExcludePackageList) {
       this.dehydrateExcludePackageList = inputCustmerConfig.dehydrateExcludePackageList;
     };
-    if (inputCustmerConfig.dehydrationPreset) {
-      this.dehydrationPreset = inputCustmerConfig.dehydrationPreset;
+    if (inputCustmerConfig.dehydratePreset) {
+      this.dehydratePreset = inputCustmerConfig.dehydratePreset;
     };
-    if (inputCustmerConfig.hydrationPreset) {
-      this.hydrationPreset = inputCustmerConfig.hydrationPreset;
+    if (inputCustmerConfig.hydratePreset) {
+      this.hydratePreset = inputCustmerConfig.hydratePreset;
     };
     if (inputCustmerConfig.materiels) {
       const { hydrate, dehydrate } = materielsConfigTransformer(inputCustmerConfig.materiels);
@@ -176,16 +176,16 @@ export class CompilationConfigManager {
       assetsDirectoryPath: this.getAssetsDirectoryPath(),
       extractResourceDirectoryName: this.extractResourceDirectoryName,
       extractResourceDirectoryPath: this.getExtractResourceDirectoryPath(),
-      hydrationResourceDirectoryName: this.hydrationResourceDirectoryName,
-      hydrationResourceDirectoryPath: this.getHydrationResourceDirectoryPath(),
-      dehydrationResourceDirectoryName: this.dehydrationResourceDirectoryName,
-      dehydrationResourceDirectoryPath: this.getDehydrationResourceDirectoryPath(),
+      hydrateResourceDirectoryName: this.hydrateResourceDirectoryName,
+      hydrateResourceDirectoryPath: this.getHydrateResourceDirectoryPath(),
+      dehydrateResourceDirectoryName: this.dehydrateResourceDirectoryName,
+      dehydrateResourceDirectoryPath: this.getDehydrateResourceDirectoryPath(),
       dehydrateIncludePackageList: this.dehydrateIncludePackageList,
       dehydrateExcludePackageList: this.dehydrateExcludePackageList,
       dehydrateDictionary: this.dehydrateDictionary,
       hydrateDictionary: this.hydrateDictionary,
-      dehydrationPreset: this.dehydrationPreset,
-      hydrationPreset: this.hydrationPreset,
+      dehydratePreset: this.dehydratePreset,
+      hydratePreset: this.hydratePreset,
       materielArrayList: this.materielArrayList
     };
   };

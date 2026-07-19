@@ -2,7 +2,7 @@ import path from "path";
 import React from "react";
 import { get } from "dot-prop";
 import { injectable, inject } from "inversify";
-import { getRuntimeConfiguration, getResourceSummary, getDehydratedResource, getHydrationResource, renderDehydratedResourceWithSandbox } from "@/frameworks/react-ssr-tool-box/runtime";
+import { getRuntimeConfiguration, getResourceSummary, getDehydrateResource, getHydrateResource } from "@/frameworks/react-ssr-tool-box/runtime";
 
 import { IOCContainer } from "@/main/server/cores/IOCContainer";
 import packageJSONContent from "@/package.json";
@@ -57,7 +57,7 @@ export class DehydrateInfomationService {
     };
     const { assetsDirectoryPath, extractResourceDirectoryPath } = await getRuntimeConfiguration();
     if (resourceSummary.hydrate) {
-      const hydrateAssets = await getHydrationResource(params.alias);
+      const hydrateAssets = await getHydrateResource(params.alias);
       if (!hydrateAssets) {
         return false;
       };
@@ -68,7 +68,7 @@ export class DehydrateInfomationService {
       return _HYDRATE_STYLE_SHEET_TAGS_;
     };
     if (resourceSummary.dehydrate) {
-      const dehydratedAssets = await getDehydratedResource(params.alias);
+      const dehydratedAssets = await getDehydrateResource(params.alias);
       if (!dehydratedAssets) {
         return false;
       };
@@ -82,13 +82,13 @@ export class DehydrateInfomationService {
 
   /** 生成前端的注水标签 **/
   public async generateHydrateScriptTags(params: ServerSiderRenderParamsType): Promise<ReactNode | false> {
-    const { assetsDirectoryPath, hydrationResourceDirectoryPath } = await getRuntimeConfiguration();
-    const hydrateAssets = await getHydrationResource(params.alias);
+    const { assetsDirectoryPath, hydrateResourceDirectoryPath } = await getRuntimeConfiguration();
+    const hydrateAssets = await getHydrateResource(params.alias);
     if (!hydrateAssets) {
       return false;
     };
     const _HYDRATE_SCRIPT_TAGS_ = get(hydrateAssets, "javascript", []).map((javascriptResourceRelativePath: string) => (
-      <script key={javascriptResourceRelativePath} src={path.join(hydrationResourceDirectoryPath, javascriptResourceRelativePath).replace(assetsDirectoryPath, "")} />
+      <script key={javascriptResourceRelativePath} src={path.join(hydrateResourceDirectoryPath, javascriptResourceRelativePath).replace(assetsDirectoryPath, "")} />
     ));
     this._HYDRATE_SCRIPT_TAGS_ = _HYDRATE_SCRIPT_TAGS_;
     return _HYDRATE_SCRIPT_TAGS_;

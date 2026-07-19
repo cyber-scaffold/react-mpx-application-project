@@ -5,13 +5,13 @@ import { RuntimeMaterielResourceDatabaseManager } from "@/frameworks/react-ssr-t
 
 import type { CompileAssetsDictionaryType } from "@/frameworks/react-ssr-tool-box/public/ResourceManager.d";
 
-export type HydrationCompileAssetsListQueryResult = CompileAssetsDictionaryType | false;
+export type HydrateCompileAssetsListQueryResult = CompileAssetsDictionaryType | false;
 
 /**
  * 注水物料的资源管理器
  * **/
 @injectable()
-export class HydrationResourceManagement {
+export class HydrateResourceManagement {
 
   constructor (
     @inject(RuntimeMaterielResourceDatabaseManager) private readonly $RuntimeMaterielResourceDatabaseManager: RuntimeMaterielResourceDatabaseManager,
@@ -20,23 +20,23 @@ export class HydrationResourceManagement {
   /**
    * 获取注水渲染时涉及到的资源
    * **/
-  public async getResourceListByAlias(alias: string): Promise<HydrationCompileAssetsListQueryResult> {
-    const hydrationCompileDatabase = this.$RuntimeMaterielResourceDatabaseManager.getHydrationCompileDatabase();
-    await hydrationCompileDatabase.read();
-    if (hydrationCompileDatabase.data["status"] !== "done") {
+  public async getResourceListByAlias(alias: string): Promise<HydrateCompileAssetsListQueryResult> {
+    const hydrateCompileDatabase = this.$RuntimeMaterielResourceDatabaseManager.getHydrateCompileDatabase();
+    await hydrateCompileDatabase.read();
+    if (hydrateCompileDatabase.data["status"] !== "done") {
       await new Promise((resolve) => setTimeout(resolve, 100));
       return await this.getResourceListByAlias(alias);
     };
-    if (!hydrationCompileDatabase.data["assets"]) {
+    if (!hydrateCompileDatabase.data["assets"]) {
       return false;
     };
-    if (!hydrationCompileDatabase.data["assets"][alias]) {
+    if (!hydrateCompileDatabase.data["assets"][alias]) {
       return false;
     };
-    const compileAssetsInfo = hydrationCompileDatabase.data["assets"][alias];
+    const compileAssetsInfo = hydrateCompileDatabase.data["assets"][alias];
     return compileAssetsInfo;
   };
 
 };
 
-IOCContainer.bind(HydrationResourceManagement).toSelf().inRequestScope();
+IOCContainer.bind(HydrateResourceManagement).toSelf().inRequestScope();

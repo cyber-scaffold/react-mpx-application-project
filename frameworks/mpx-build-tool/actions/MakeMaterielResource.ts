@@ -2,9 +2,9 @@ import { injectable, inject } from "inversify";
 
 import { IOCContainer } from "@/frameworks/mpx-build-tool/cores/IOCContainer";
 import { FrameworkConfigManager } from "@/frameworks/mpx-build-tool/commons/FrameworkConfigManager";
-import { setCompileConfiguration, makeHydrationResource, makeDehydratedResource } from "@/frameworks/react-ssr-tool-box/compilation";
+import { setCompileConfiguration, makeHydrateResource, makeDehydrateResource } from "@/frameworks/react-ssr-tool-box/compilation";
 
-import { dehydrationEntryFilePreset, hydrationEntryFilePreset } from "@/frameworks/preset-mpx-basic";
+import { dehydrateEntryFilePreset, hydrateEntryFilePreset } from "@/frameworks/preset-mpx-basic";
 
 /**
  * 在构建模式下制作脱水和注水物料的控制器
@@ -18,19 +18,19 @@ export class MakeMaterielResource {
 
   public async buildMaterielResourceByDevelopmentAndWatch() {
     const { projectDirectoryPath, assetsDirectoryName, dehydrateIncludePackageList, dehydrateExcludePackageList, materiels } = await this.$FrameworkConfigManager.getRuntimeConfig();
-    await setCompileConfiguration({ projectDirectoryPath, assetsDirectoryName, dehydrateIncludePackageList, dehydrateExcludePackageList, hydrationPreset: hydrationEntryFilePreset, dehydrationPreset: dehydrationEntryFilePreset, materiels });
+    await setCompileConfiguration({ projectDirectoryPath, assetsDirectoryName, dehydrateIncludePackageList, dehydrateExcludePackageList, hydratePreset: hydrateEntryFilePreset, dehydratePreset: dehydrateEntryFilePreset, materiels });
     await Promise.all([
-      makeHydrationResource({ mode: "development", watch: true }),
-      makeDehydratedResource({ mode: "development", watch: true })
+      makeHydrateResource({ mode: "development", watch: true }),
+      makeDehydrateResource({ mode: "development", watch: true })
     ]);
   };
 
   public async buildMaterielResourceByProductionNotWatch() {
     const { projectDirectoryPath, assetsDirectoryName, dehydrateIncludePackageList, dehydrateExcludePackageList, materiels } = await this.$FrameworkConfigManager.getRuntimeConfig();
-    await setCompileConfiguration({ projectDirectoryPath, assetsDirectoryName, dehydrateIncludePackageList, dehydrateExcludePackageList, hydrationPreset: hydrationEntryFilePreset, dehydrationPreset: dehydrationEntryFilePreset, materiels });
+    await setCompileConfiguration({ projectDirectoryPath, assetsDirectoryName, dehydrateIncludePackageList, dehydrateExcludePackageList, hydratePreset: hydrateEntryFilePreset, dehydratePreset: dehydrateEntryFilePreset, materiels });
     await Promise.all([
-      makeHydrationResource({ mode: "production", watch: false }),
-      makeDehydratedResource({ mode: "production", watch: false })
+      makeHydrateResource({ mode: "production", watch: false }),
+      makeDehydrateResource({ mode: "production", watch: false })
     ]);
   };
 

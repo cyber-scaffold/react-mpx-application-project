@@ -16,17 +16,17 @@ import { LessLoaderConfigManager } from "@/frameworks/react-ssr-tool-box/compila
 import { SassLoaderConfigManager } from "@/frameworks/react-ssr-tool-box/compilation/configs/loaders/SassLoaderConfigManager";
 import { CssLoaderConfigManager } from "@/frameworks/react-ssr-tool-box/compilation/configs/loaders/CssLoaderConfigManager";
 
-import { ConvertHydrationEntryFile } from "@/frameworks/react-ssr-tool-box/compilation/services/ConvertHydrationEntryFile";
+import { ConvertHydrateEntryFile } from "@/frameworks/react-ssr-tool-box/compilation/services/ConvertHydrateEntryFile";
 import { CompilerProgressPlugin } from "@/frameworks/react-ssr-tool-box/compilation/plugins/CompilerProgressPlugin";
 
 import type { PathData, Compiler, Configuration } from "webpack";
 
 @injectable()
-export class HydrationConfigManager {
+export class HydrateConfigManager {
 
   constructor (
     @inject(CompilationMaterielResourceDatabaseManager) private readonly $CompilationMaterielResourceDatabaseManager: CompilationMaterielResourceDatabaseManager,
-    @inject(ConvertHydrationEntryFile) private readonly $ConvertHydrationEntryFile: ConvertHydrationEntryFile,
+    @inject(ConvertHydrateEntryFile) private readonly $ConvertHydrateEntryFile: ConvertHydrateEntryFile,
     @inject(ScriptLoaderConfigManger) private readonly $ScriptLoaderConfigManger: ScriptLoaderConfigManger,
     @inject(FileLoaderConfigManager) private readonly $FileLoaderConfigManager: FileLoaderConfigManager,
     @inject(LessLoaderConfigManager) private readonly $LessLoaderConfigManager: LessLoaderConfigManager,
@@ -39,14 +39,14 @@ export class HydrationConfigManager {
    * 最基础的webpack编译配置
    * **/
   public async getBasicConfig(): Promise<Configuration> {
-    const { projectDirectoryPath, extractResourceDirectoryName, hydrationResourceDirectoryPath } = await this.$CompilationConfigManager.getRuntimeConfig();
+    const { projectDirectoryPath, extractResourceDirectoryName, hydrateResourceDirectoryPath } = await this.$CompilationConfigManager.getRuntimeConfig();
     return {
-      entry: this.$ConvertHydrationEntryFile.getWebpackEntryPoints(),
+      entry: this.$ConvertHydrateEntryFile.getWebpackEntryPoints(),
       output: {
         clean: true,
-        path: hydrationResourceDirectoryPath,
+        path: hydrateResourceDirectoryPath,
         devtoolModuleFilenameTemplate: "[absolute-resource-path]",
-        filename: (pathData: PathData) => `index-${pathData.chunk.name}-hydration-[contenthash].js`,
+        filename: (pathData: PathData) => `index-${pathData.chunk.name}-hydrate-[contenthash].js`,
         library: {
           type: "window",
           export: "default",
@@ -64,7 +64,7 @@ export class HydrationConfigManager {
       },
       module: {
         rules: (await Promise.all([
-          this.$FileLoaderConfigManager.getConfigByHydration(),
+          this.$FileLoaderConfigManager.getConfigByHydrate(),
           this.$ScriptLoaderConfigManger.getLoaderConfig(),
           this.$LessLoaderConfigManager.getLoaderConfig(),
           this.$SassLoaderConfigManager.getLoaderConfig(),
@@ -75,19 +75,19 @@ export class HydrationConfigManager {
         new WebpackBar({ name: "制作注水物料" }),
         // new NodePolyfillPlugin(),
         // new DllReferencePlugin({
-        //   manifest: path.resolve(assetsDirectoryPath, "./dll/hydration.dll.json")
+        //   manifest: path.resolve(assetsDirectoryPath, "./dll/hydrate.dll.json")
         // }),
         new CompilerProgressPlugin({
-          type: "hydration",
+          type: "hydrate",
           materielResourceDatabaseManager: this.$CompilationMaterielResourceDatabaseManager
         }),
         new DefinePlugin({
-          "process.env.RESOURCE_TYPE": JSON.stringify("hydration"),
+          "process.env.RESOURCE_TYPE": JSON.stringify("hydrate"),
           "process.env.NODE_ENV": "window._INJECT_RUNTIME_FROM_SERVER_.env.NODE_ENV"
         }),
         new MiniCssExtractPlugin({
           linkType: "text/css",
-          filename: (pathData: PathData) => `../${extractResourceDirectoryName}/index-${pathData.chunk.name}-hydration-[contenthash].css`
+          filename: (pathData: PathData) => `../${extractResourceDirectoryName}/index-${pathData.chunk.name}-hydrate-[contenthash].css`
         })
       ]
     };
@@ -102,7 +102,7 @@ export class HydrationConfigManager {
       mode: "development",
       devtool: "source-map"
     }));
-    await this.$ConvertHydrationEntryFile.mountWithWebpackCompiler(webpackCompiler);
+    await this.$ConvertHydrateEntryFile.mountWithWebpackCompiler(webpackCompiler);
     return webpackCompiler;
   };
 
@@ -124,10 +124,10 @@ export class HydrationConfigManager {
         })
       ]
     }));
-    await this.$ConvertHydrationEntryFile.mountWithWebpackCompiler(webpackCompiler);
+    await this.$ConvertHydrateEntryFile.mountWithWebpackCompiler(webpackCompiler);
     return webpackCompiler;
   };
 
 };
 
-IOCContainer.bind(HydrationConfigManager).toSelf().inRequestScope();
+IOCContainer.bind(HydrateConfigManager).toSelf().inRequestScope();

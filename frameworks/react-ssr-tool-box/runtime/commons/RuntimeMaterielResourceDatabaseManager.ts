@@ -13,9 +13,9 @@ export class RuntimeMaterielResourceDatabaseManager {
 
   private summaryDatabase: Low<SummaryDatabaseDictionaryType>;
 
-  private hydrationCompileDatabase: Low<ResourceDatabaseDictionaryType>;
+  private hydrateCompileDatabase: Low<ResourceDatabaseDictionaryType>;
 
-  private dehydrationCompileDatabase: Low<ResourceDatabaseDictionaryType>;
+  private dehydrateCompileDatabase: Low<ResourceDatabaseDictionaryType>;
 
   constructor (
     @inject(RuntimeConfigManager) private readonly $RuntimeConfigManager: RuntimeConfigManager
@@ -25,8 +25,8 @@ export class RuntimeMaterielResourceDatabaseManager {
     try {
       const { assetsDirectoryPath } = await this.$RuntimeConfigManager.getRuntimeConfig();
       this.summaryDatabase = new Low(new JSONFile(path.resolve(assetsDirectoryPath, "./summary.json")), {});
-      this.hydrationCompileDatabase = new Low(new JSONFile(path.resolve(assetsDirectoryPath, "./hydration-compile.json")), {});
-      this.dehydrationCompileDatabase = new Low(new JSONFile(path.resolve(assetsDirectoryPath, "./dehydration-compile.json")), {});
+      this.hydrateCompileDatabase = new Low(new JSONFile(path.resolve(assetsDirectoryPath, "./hydrate-compile.json")), {});
+      this.dehydrateCompileDatabase = new Low(new JSONFile(path.resolve(assetsDirectoryPath, "./dehydrate-compile.json")), {});
     } catch (error) {
       throw error;
     };
@@ -36,12 +36,12 @@ export class RuntimeMaterielResourceDatabaseManager {
     return this.summaryDatabase;
   };
 
-  public getHydrationCompileDatabase(): Low<ResourceDatabaseDictionaryType> {
-    return this.hydrationCompileDatabase;
+  public getHydrateCompileDatabase(): Low<ResourceDatabaseDictionaryType> {
+    return this.hydrateCompileDatabase;
   };
 
-  public getDehydrationCompileDatabase(): Low<ResourceDatabaseDictionaryType> {
-    return this.dehydrationCompileDatabase;
+  public getDehydrateCompileDatabase(): Low<ResourceDatabaseDictionaryType> {
+    return this.dehydrateCompileDatabase;
   };
 
 };

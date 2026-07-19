@@ -22,9 +22,9 @@ import type { IUnionFs, IFS } from "unionfs";
  * @docs https://webpack.docschina.org/api/node#custom-file-systems
  * **/
 @injectable()
-export class ConvertDehydrationEntryFile {
+export class ConvertDehydrateEntryFile {
 
-  private virtualDirectoryPath = path.resolve(process.cwd(), `./${uuid()}/__virtual__/dehydration/`);
+  private virtualDirectoryPath = path.resolve(process.cwd(), `./${uuid()}/__virtual__/dehydrate/`);
 
   private custmerFileSystem: IUnionFs = ufs.use((memfs.fs as unknown as IFS)).use(fs);
 
@@ -40,8 +40,8 @@ export class ConvertDehydrationEntryFile {
    * 并生成webpack可以识别的entry-points对象
    * **/
   public async initialize(materielPairs: [alias: string, detail: MaterielCompilationInfoType][]) {
-    const { dehydrationPreset } = await this.$CompilationConfigManager.getRuntimeConfig();
-    const virtualFileVolumePairs = await dehydrationPreset(materielPairs);
+    const { dehydratePreset } = await this.$CompilationConfigManager.getRuntimeConfig();
+    const virtualFileVolumePairs = await dehydratePreset(materielPairs);
     /** 在内存中写入这些新入口文件的内容 **/
     memfs.vol.fromJSON(fromPairs(virtualFileVolumePairs), this.virtualDirectoryPath);
     /** 生成详细的webpackEntryPoints **/
@@ -71,4 +71,4 @@ export class ConvertDehydrationEntryFile {
 };
 
 
-IOCContainer.bind(ConvertDehydrationEntryFile).toSelf().inRequestScope()
+IOCContainer.bind(ConvertDehydrateEntryFile).toSelf().inRequestScope()

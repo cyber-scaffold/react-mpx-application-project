@@ -7,16 +7,16 @@ export type RuntimeConfigReturnType = {
   projectDirectoryPath: string
   assetsDirectoryPath: string
   extractResourceDirectoryPath: string
-  hydrationResourceDirectoryPath: string
-  dehydrationResourceDirectoryPath: string
+  hydrateResourceDirectoryPath: string
+  dehydrateResourceDirectoryPath: string
 };
 
 export type InputCustmerRuntimeConfigType = {
   projectDirectoryPath?: string
   assetsDirectoryName?: string
   extractResourceDirectoryName?: string
-  hydrationResourceDirectoryName?: string
-  dehydrationResourceDirectoryName?: string
+  hydrateResourceDirectoryName?: string
+  dehydrateResourceDirectoryName?: string
 };
 
 /** 
@@ -47,19 +47,19 @@ export class RuntimeConfigManager {
   };
 
   /** 脱水资源的输出位置对应的文件夹名称 **/
-  private dehydrationResourceDirectoryName = "dehydration";
+  private dehydrateResourceDirectoryName = "dehydrate";
 
   /** 脱水资源的输出位置(服务端ssr渲染函数)(根据 物料资产的目录 和 对应文件夹名称 计算得到) **/
-  private getDehydrationResourceDirectoryPath() {
-    return path.resolve(this.getAssetsDirectoryPath(), this.dehydrationResourceDirectoryName);
+  private getDehydrateResourceDirectoryPath() {
+    return path.resolve(this.getAssetsDirectoryPath(), this.dehydrateResourceDirectoryName);
   };
 
   /** 注水资源的输出位置对应的文件夹名称 **/
-  private hydrationResourceDirectoryName = "hydration";
+  private hydrateResourceDirectoryName = "hydrate";
 
   /** 注水资源的输出位置(前端javascript和css)(根据 物料资产的目录 和 对应文件夹名称 计算得到) **/
-  private getHydrationResourceDirectoryPath() {
-    return path.resolve(this.getAssetsDirectoryPath(), this.hydrationResourceDirectoryName)
+  private getHydrateResourceDirectoryPath() {
+    return path.resolve(this.getAssetsDirectoryPath(), this.hydrateResourceDirectoryName)
   };
 
   /** 初始化配置并计算出剩余的属性 **/
@@ -76,11 +76,11 @@ export class RuntimeConfigManager {
     if (inputCustmerConfig.extractResourceDirectoryName) {
       this.extractResourceDirectoryName = inputCustmerConfig.extractResourceDirectoryName;
     };
-    if (inputCustmerConfig.hydrationResourceDirectoryName) {
-      this.hydrationResourceDirectoryName = inputCustmerConfig.hydrationResourceDirectoryName;
+    if (inputCustmerConfig.hydrateResourceDirectoryName) {
+      this.hydrateResourceDirectoryName = inputCustmerConfig.hydrateResourceDirectoryName;
     };
-    if (inputCustmerConfig.dehydrationResourceDirectoryName) {
-      this.dehydrationResourceDirectoryName = inputCustmerConfig.dehydrationResourceDirectoryName;
+    if (inputCustmerConfig.dehydrateResourceDirectoryName) {
+      this.dehydrateResourceDirectoryName = inputCustmerConfig.dehydrateResourceDirectoryName;
     };
   };
 
@@ -93,8 +93,8 @@ export class RuntimeConfigManager {
       projectDirectoryPath: this.projectDirectoryPath,
       assetsDirectoryPath: this.getAssetsDirectoryPath(),
       extractResourceDirectoryPath: this.getExtractResourceDirectoryPath(),
-      hydrationResourceDirectoryPath: this.getHydrationResourceDirectoryPath(),
-      dehydrationResourceDirectoryPath: this.getDehydrationResourceDirectoryPath()
+      hydrateResourceDirectoryPath: this.getHydrateResourceDirectoryPath(),
+      dehydrateResourceDirectoryPath: this.getDehydrateResourceDirectoryPath()
     };
   };
 

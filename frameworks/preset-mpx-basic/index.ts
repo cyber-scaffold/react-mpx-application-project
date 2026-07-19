@@ -1,3 +1,3 @@
 
-export { dehydrationEntryFilePreset } from "@/frameworks/preset-mpx-basic/scripts/dehydrationEntryFilePreset";
-export { hydrationEntryFilePreset } from "@/frameworks/preset-mpx-basic/scripts/hydrationEntryFilePreset";
+export { dehydrateEntryFilePreset } from "@/frameworks/preset-mpx-basic/scripts/dehydrateEntryFilePreset";
+export { hydrateEntryFilePreset } from "@/frameworks/preset-mpx-basic/scripts/hydrateEntryFilePreset";

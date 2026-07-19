@@ -37,7 +37,7 @@ export class ExpressHttpServer {
   /** 服务启动时执行的代码 **/
   public async bootstrap() {
     const { server } = await this.$ApplicationConfigManager.getRuntimeConfig();
-    const { hydrationResourceDirectoryPath } = await getRuntimeConfiguration();
+    const { hydrateResourceDirectoryPath } = await getRuntimeConfiguration();
     const { extractResourceDirectory, custmerStaticResourceDirectory, projectStaticResourceDirectory, swaggerResourceDirectory, publicResourceDirectory } = await this.$ApplicationConfigManager.getRuntimeConfig();
     /** 注册中间件 **/
     this.expressInstance.use(cookieParser());
@@ -58,7 +58,7 @@ export class ExpressHttpServer {
       maxAge: process.env.NODE_ENV === "development" ? -1 : (100 * 24 * 60 * 60)
     }));
     /** 前端渲染需要的注水资源的资源目录 */
-    this.expressInstance.use("/hydration/", express.static(hydrationResourceDirectoryPath, {
+    this.expressInstance.use("/hydrate/", express.static(hydrateResourceDirectoryPath, {
       maxAge: process.env.NODE_ENV === "development" ? -1 : (100 * 24 * 60 * 60)
     }));
     /** 先从用户自定义的静态资源文件夹开始搜索 **/
